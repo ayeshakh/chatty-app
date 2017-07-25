@@ -3,17 +3,41 @@ import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      messages: [
+        {
+         username: "Bob",
+          content: "Has anyone seen my marbles?",
+        },
+        {
+          username: "Anonymous",
+          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
+        }
+        ]
+      }
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState()  // change the state. this calls render() and the component updates.
+    }, 3000)
+  }
+
   render() {
-    console.log("Rendering <App/>");
+    console.log("Rendering <App/>")
     return (
-    <div> //there should always be a parent element if you are adding more than 1 element i.e div
-      <nav className="navbar"> //use className instead of name
-       <a className="navbar-brand">Chatty</a>
-      </nav>
-      <MessageList />
-      <ChatBar />
-    </div>
+      <div>
+        <nav className="navbar">
+          <a className="navbar-brand">Chatty</a>
+        </nav>
+        <MessageList />
+        <ChatBar currentUser={this.state.currentUser.name} />
+      </div>
     );
   }
 }
+
 export default App;

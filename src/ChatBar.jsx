@@ -4,10 +4,10 @@ class ChatBar extends Component {
   render() {
     console.log("Rendering <App/>");
     return (
-  <footer className="chatbar"> //use className instead of name
-  <input className="chatbar-username" placeholder="Your Name (Optional)" />
-  <input className="chatbar-message" placeholder="Type a message and hit ENTER" />
-</footer>
+      <footer className="chatbar">
+        <input className="chatbar-username" defaultValue={this.props.currentUser}/>
+        <input className="chatbar-message" placeholder="Type a message and hit ENTER" />
+      </footer>
     );
   }
 }
