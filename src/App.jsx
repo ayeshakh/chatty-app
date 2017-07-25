@@ -20,11 +20,49 @@ class App extends Component {
       }
   }
 
-  componentDidMount() {
-    setTimeout(() => {
+  handleKeyPress = (event) => {
+      console.log("handleKeyPress")
+      console.log(event.key)
+      if(event.key === "Enter") {
+        const newMessage = {
+        username: this.state.currentUser.name,
+        content: event.target.value
+      };
+
+      const messages = this.state.messages.concat(newMessage)
+      this.setState({messages: messages})
+    }
+  }
+
+  // in App.jsx
+componentDidMount() {
+  console.log("componentDidMount <App />");
+  setTimeout(() => {
+    console.log("Simulating incoming message");
+    // Add a new message to the list of messages in the data store
+  //   handleSubmit(e) {
+  //   e.preventDefault();
+  //   var newMessage =  {
+  //     id: i,
+  //     username: this.state.currentUser,
+  //     content: this.state.content
+  //   };
+  //   this.setState((prevState) => ({
+  //     messages: prevState.messages.concat(newMessages)
+  //   }));
+  // }
+    const newMessage = {id: 3, username: "Michelle", content: "Hello There"};
+    const messages = this.state.messages.concat(newMessage)
+    // Update the state of the app component.
+    // Calling setState will trigger a call to render() in App and all child components.
+    this.setState({messages: messages})
       //this.setState()  // change the state. this calls render() and the component updates. so only use when state changes
     }, 3000)
   }
+
+
+
+
 
   render() {
     console.log("Rendering <App/>")
@@ -34,7 +72,7 @@ class App extends Component {
           <a className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser.name} />
+        <ChatBar currentUser={this.state.currentUser.name} handleKeyPress={this.handleKeyPress} />
       </div>
     );
   }
