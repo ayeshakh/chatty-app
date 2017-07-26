@@ -29,11 +29,6 @@ class App extends Component {
   // }
 
   sendMessage = (message) => {
-    // update local state with new message
-    this.setState((prevState) => {
-      return { messages: prevState.messages.concat(message) }
-    })
-    // send the message to our server
     this.sendText(message);
   }
 
@@ -48,19 +43,35 @@ class App extends Component {
       console.log("Connected to server");
     };
 
-    setTimeout(() => {
-      console.log("Simulating incoming message");
+    // setTimeout(() => {
+    //   console.log("Simulating incoming message");
 
-      const newMessage = {id: 3, username: "Michelle", content: "Hello There"};
-      const messages = this.state.messages.concat(newMessage)
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messages: messages})
-        //this.setState()  // change the state. this calls render() and the component updates. so only use when state changes
-      }, 3000)
+    //   const newMessage = {id: 3, username: "Michelle", content: "Hello There"};
+    //   const messages = this.state.messages.concat(newMessage)
+    //   // Update the state of the app component.
+    //   // Calling setState will trigger a call to render() in App and all child components.
+    //   this.setState({messages: messages})
+    //     //this.setState()  // change the state. this calls render() and the component updates. so only use when state changes
+    //   }, 3000)
 
     this.socket = socket;
+
+    socket.onmessage = (event) => {
+      //console.log(event.data)
+      let msg = JSON.parse(event.data);
+      console.log(msg);
+  // code to handle incoming message
+
+      //let incomingMsg =
+        const newMessage = {id: msg.dataId, username: msg.username, content: msg.content};
+        const messages = this.state.messages.concat(newMessage)
+
+        this.setState({messages:messages})
+      console.log(messages)
+    }
   }
+
+
 
   sendText(message) {
   // Construct a msg object containing the data the server needs to process the message from the chat client.
@@ -73,6 +84,7 @@ class App extends Component {
     // Send the msg object as a JSON-formatted string.
     this.socket.send(JSON.stringify(msg));
   }
+
 
   render() {
     console.log("Rendering <App/>")
