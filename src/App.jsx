@@ -42,9 +42,8 @@ class App extends Component {
     this.setState((prevState) => {
       return { messages: prevState.messages.concat(message) }
     })
-
     // send the message to our server
-    sendText(message);
+    this.sendText(message);
   }
 
   // in App.jsx

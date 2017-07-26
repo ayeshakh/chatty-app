@@ -7,25 +7,29 @@ class ChatBar extends Component {
     super(props);
 
     this.state = {
-      username: props.currentUser.name,
-      message: ''
+      username: props.currentUser,
+      content: ''
     }
   }
 
   handleMessageKeyPress = (event) => {
+    console.log("handleKeyPress")
     if(event.key === "Enter") {
       const newMessage = {
         username: this.state.username,
-        content: event.target.value
+        content: this.state.content
       };
       // send message to parent component to send to server
       this.props.sendMessage(newMessage);
       // reset text box to empty string
-      this.setState({message: ''});
-    } else {
-      // update state with current text box content
-      this.setState({message: event.target.value});
+      this.setState({content: ''});
+      //this.refs.chatbarMessage.value = ''
     }
+  }
+
+  // update state with current text box content
+  handleOnChange = (event) => {
+    this.setState({content: event.target.value});
   }
 
         //onChange={this.handleChange}
@@ -34,10 +38,16 @@ class ChatBar extends Component {
     console.log("Rendering <App/>");
     return (
       <footer className="chatbar">
-        <input className="chatbar-username" value={this.state.username} }/>
-        <input className="chatbar-message" type="text" value={this.state.message} onKeyPress={this.handleMessageKeyPress} />
+        <input className="chatbar-username" value={this.state.username}/>
+        <input className="chatbar-message" type="text" onChange={this.handleOnChange} onKeyPress={this.handleMessageKeyPress} value={this.state.content} />
       </footer>
     );
   }
 }
 export default ChatBar;
+
+//so we need the onchange to make the value equal to the value you are typing before enter and after enter the value becomes
+//equal to the empty state.
+//if we dont have onchange the value and the keypress conflict and the value stays empty as it is not sure of what to do.
+// on change and value fire together before keypress.
+//if we dont have value inside the input the text field doesnt clear because it cant reach the empty state.
