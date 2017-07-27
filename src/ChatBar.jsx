@@ -12,6 +12,12 @@ class ChatBar extends Component {
     }
   }
 
+
+  handleInputChange = (event) => {
+    this.setState({username: event.target.value});
+  }
+
+
   handleMessageKeyPress = (event) => {
     console.log("handleKeyPress")
     if(event.key === "Enter") {
@@ -38,7 +44,7 @@ class ChatBar extends Component {
     console.log("Rendering <App/>");
     return (
       <footer className="chatbar">
-        <input className="chatbar-username" value={this.state.username}/>
+        <input className="chatbar-username" onChange={this.handleInputChange} value={this.state.username}/>
         <input className="chatbar-message" type="text" onChange={this.handleOnChange} onKeyPress={this.handleMessageKeyPress} value={this.state.content} />
       </footer>
     );
