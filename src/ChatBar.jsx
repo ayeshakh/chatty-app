@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 
 class ChatBar extends Component {
-
-
   constructor(props) {
     super(props);
 
@@ -12,9 +10,18 @@ class ChatBar extends Component {
     }
   }
 
+  handleUserKeyPress = (event) => {
+    console.log("handleUserKeyPress")
+    if(event.key === "Enter") {
+      const user = {username:this.state.username}
+      this.props.sendUser(user);
+      // send message to parent component to send to server
+      }
+    }
 
   handleInputChange = (event) => {
     this.setState({username: event.target.value});
+    //console.log(username)
   }
 
 
@@ -32,19 +39,16 @@ class ChatBar extends Component {
       //this.refs.chatbarMessage.value = ''
     }
   }
-
   // update state with current text box content
   handleOnChange = (event) => {
     this.setState({content: event.target.value});
   }
 
-        //onChange={this.handleChange}
-//onKeyPress={this.handleKeyPress}
   render() {
     console.log("Rendering <App/>");
     return (
       <footer className="chatbar">
-        <input className="chatbar-username" onChange={this.handleInputChange} value={this.state.username}/>
+        <input className="chatbar-username" onChange={this.handleInputChange} onKeyPress={this.handleUserKeyPress} value={this.state.username}/>
         <input className="chatbar-message" type="text" onChange={this.handleOnChange} onKeyPress={this.handleMessageKeyPress} value={this.state.content} />
       </footer>
     );

@@ -13,23 +13,12 @@ class App extends Component {
       }
   }
 
-  // handleKeyPress = (event) => {
-  //     console.log("handleKeyPress")
-  //     console.log(event.key)
-  //     if(event.key === "Enter") {
-  //       const newMessage = {
-  //         username: this.state.currentUser.name,
-  //         content: event.target.value
-  //       };
-  //       sendText(newMessage);
-  //     }
-  //     const messages = this.state.messages.concat(newMessage)
-  //     this.setState({messages: messages})
-  //   }
-  // }
-
   sendMessage = (message) => {
     this.sendText(message);
+  }
+
+  sendUser = (user) => {
+    this.sendNotification(user);
   }
 
   // in App.jsx
@@ -42,49 +31,42 @@ class App extends Component {
       ///Socket.send("Connected to server");
       console.log("Connected to server");
     };
-
-    // setTimeout(() => {
-    //   console.log("Simulating incoming message");
-
-    //   const newMessage = {id: 3, username: "Michelle", content: "Hello There"};
-    //   const messages = this.state.messages.concat(newMessage)
-    //   // Update the state of the app component.
-    //   // Calling setState will trigger a call to render() in App and all child components.
-    //   this.setState({messages: messages})
-    //     //this.setState()  // change the state. this calls render() and the component updates. so only use when state changes
-    //   }, 3000)
-
     this.socket = socket;
 
     socket.onmessage = (event) => {
-      //console.log(event.data)
       let msg = JSON.parse(event.data);
       console.log(msg);
   // code to handle incoming message
-
-      //let incomingMsg =
-        const newMessage = {id: msg.dataId, username: msg.username, content: msg.content};
-        const messages = this.state.messages.concat(newMessage)
-
-        this.setState({messages:messages})
+      const newMessage = {id: msg.dataId, username: msg.username, content: msg.content};
+      const messages = this.state.messages.concat(newMessage)
+      this.setState({messages:messages})
       console.log(messages)
     }
   }
 
-
-
   sendText(message) {
   // Construct a msg object containing the data the server needs to process the message from the chat client.
-    var msg = {
-      type: "sendMessage",
+    let msg = {
+      type: "postMessage",
       username: message.username,
       content: message.content
     };
-
     // Send the msg object as a JSON-formatted string.
     this.socket.send(JSON.stringify(msg));
   }
 
+  sendNotification(user) {
+
+  // Construct a msg object containing the data the server needs to process the message from the chat client.
+    if (user.username != this.state.currentUser.name) {
+    let notification = {
+      type: "postNotification",
+      content: this.state.currentUser.name + " changed their name to " + user.username
+      }
+    this.socket.send(JSON.stringify(notification));
+    this.setState({currentUser:{name: user.username}});
+    };
+  }
 
   render() {
     console.log("Rendering <App/>")
@@ -94,7 +76,7 @@ class App extends Component {
           <a className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser.name} sendMessage={this.sendMessage} />
+        <ChatBar currentUser={this.state.currentUser.name} sendMessage={this.sendMessage} sendUser= {this.sendUser}/>
       </div>
     );
   }
