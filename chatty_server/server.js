@@ -21,12 +21,27 @@ wss.on('connection', (ws) => {
   console.log('Client connected');
 
 ws.on('message', function incoming(data) {
-  data = JSON.parse(data)
-  //console.log(typeof data);
-  console.log("user " + data.username + " said " + data.content);
-  data.dataId = uuid()
-  wss.broadcast(JSON.stringify(data));
-});
+  data = JSON.parse(data);
+    // The socket event data is encoded as a JSON string.
+    // This line turns it into an object
+
+    switch(data.type) {
+      case "PostMessage":
+        console.log("user " + data.username + " said " + data.content);
+        data.type = "IncomingMessage"
+        data.dataId = uuid()
+        wss.broadcast(JSON.stringify(data));
+        break;
+      case "PostNotification":
+        console.log(data.content);
+        data.type = "IncomingNotification"
+        wss.broadcast(JSON.stringify(data));
+        break;
+      default:
+        // show an error in the console if the message type is unknown
+        throw new Error("Unknown event type " + data.type);
+    }
+  });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => console.log('Client disconnected'));

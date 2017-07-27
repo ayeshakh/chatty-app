@@ -9,8 +9,9 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: [] // messages coming from the server will be stored here as they arrive
-      }
+      messages: [], // messages coming from the server will be stored here as they arrive
+      notifications:[]
+    }
   }
 
   sendMessage = (message) => {
@@ -34,20 +35,35 @@ class App extends Component {
     this.socket = socket;
 
     socket.onmessage = (event) => {
-      let msg = JSON.parse(event.data);
-      console.log(msg);
-  // code to handle incoming message
-      const newMessage = {id: msg.dataId, username: msg.username, content: msg.content};
-      const messages = this.state.messages.concat(newMessage)
-      this.setState({messages:messages})
-      console.log(messages)
-    }
-  }
+    console.log(event);
+    let messages
+    // The socket event data is encoded as a JSON string.
+    // This line turns it into an object
+      const data = JSON.parse(event.data);
+      switch(data.type) {
+        case "IncomingMessage":
+          const newMessage = {type: "IncomingMessage", id: data.dataId, username: data.username, content: data.content};
+          messages = this.state.messages.concat(newMessage)
+          this.setState({messages:messages})
+          console.log(messages);
+          break;
+        case "IncomingNotification":
+          const newNotification = {type: "IncomingMessage", content: data.content};
+          messages = this.state.messages.concat(newNotification)
+          this.setState({messages:messages})
+          console.log(messages);
+          break;
+        default:
+          // show an error in the console if the message type is unknown
+          throw new Error("Unknown event type " + data.type);
+        }
+      }
+}
 
   sendText(message) {
   // Construct a msg object containing the data the server needs to process the message from the chat client.
     let msg = {
-      type: "postMessage",
+      type: "PostMessage",
       username: message.username,
       content: message.content
     };
@@ -60,7 +76,7 @@ class App extends Component {
   // Construct a msg object containing the data the server needs to process the message from the chat client.
     if (user.username != this.state.currentUser.name) {
     let notification = {
-      type: "postNotification",
+      type: "PostNotification",
       content: this.state.currentUser.name + " changed their name to " + user.username
       }
     this.socket.send(JSON.stringify(notification));
