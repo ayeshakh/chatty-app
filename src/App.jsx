@@ -10,7 +10,7 @@ class App extends Component {
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [], // messages coming from the server will be stored here as they arrive
-      notifications:[]
+      numbers: 0
     }
   }
 
@@ -53,6 +53,10 @@ class App extends Component {
           this.setState({messages:messages})
           console.log(messages);
           break;
+        case "IncomingClientsConnected":
+          const number = {type:"IncomingClientsConnected", clients:data.clients }
+          this.setState({numbers: number.clients})
+          break;
         default:
           // show an error in the console if the message type is unknown
           throw new Error("Unknown event type " + data.type);
@@ -90,6 +94,7 @@ class App extends Component {
       <div>
         <nav className="navbar">
           <a className="navbar-brand">Chatty</a>
+          <h4>{this.state.numbers} users online</h4>
         </nav>
         <MessageList messages={this.state.messages} />
         <ChatBar currentUser={this.state.currentUser.name} sendMessage={this.sendMessage} sendUser= {this.sendUser}/>
