@@ -8,7 +8,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [], // messages coming from the server will be stored here as they arrive
       numbers: 0
     }
@@ -36,7 +36,7 @@ class App extends Component {
 
     socket.onmessage = (event) => {
     console.log(event);
-    let messages
+    let messages // to define messages in the componentDidMount
     // The socket event data is encoded as a JSON string.
     // This line turns it into an object
       const data = JSON.parse(event.data);

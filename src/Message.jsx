@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 class Message extends Component {
   render() {
     console.log("Rendering <Message/>");
-    console.log(this.props)
+    // to check if its a message or notification
     if(this.props.type === "IncomingMessage") {
       return (
         <div className="message">
@@ -20,8 +20,3 @@ class Message extends Component {
 };
 
 export default Message;
-
-// {
-//   type: 'notification'
-//   content: 'changed name'
-// }

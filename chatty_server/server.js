@@ -33,14 +33,10 @@ wss.on('connection', (ws) => {
   }
     wss.broadcast(updateClientCount())
 
-
-  //console.log(clientsCount)
-
 ws.on('message', function incoming(data) {
   data = JSON.parse(data);
     // The socket event data is encoded as a JSON string.
     // This line turns it into an object
-
     switch(data.type) {
       case "PostMessage":
         console.log("user " + data.username + " said " + data.content);

@@ -1,32 +1,32 @@
 import React, {Component} from 'react';
 
+//using the component from Parent to make its own state
 class ChatBar extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       username: props.currentUser,
       content: ''
     }
   }
 
+  // to handle the event that user changes the name
   handleUserKeyPress = (event) => {
-    console.log("handleUserKeyPress")
     if(event.key === "Enter") {
       const user = {username:this.state.username}
       this.props.sendUser(user);
       // send message to parent component to send to server
-      }
     }
+  }
 
+  //update the state of the current username text box
   handleInputChange = (event) => {
     this.setState({username: event.target.value});
-    //console.log(username)
   }
 
 
+  // to handle the event that user types a message
   handleMessageKeyPress = (event) => {
-    console.log("handleKeyPress")
     if(event.key === "Enter") {
       const newMessage = {
         username: this.state.username,
@@ -39,6 +39,7 @@ class ChatBar extends Component {
       //this.refs.chatbarMessage.value = ''
     }
   }
+
   // update state with current text box content
   handleOnChange = (event) => {
     this.setState({content: event.target.value});
