@@ -3,6 +3,12 @@
 
 A minimal and light dev environment for ReactJS.
 
+## Final Product
+
+!["1 user connected and has posted a message and changed his name"](https://github.com/ayeshakh/chatty-app/blob/master/docs/chatty-app-1%20user.png)
+!["1 user connected and has posted a message and changed his name"](https://github.com/ayeshakh/chatty-app/blob/master/docs/chatty-app%202%20users.png)
+
+
 ### Usage
 
 Clone the boilerplate and create your own git repo.
